@@ -6,6 +6,7 @@
 
 <script>
 import mapboxgl from "mapbox-gl";
+import firebase from 'firebase'
 export default {
   name: "MapBox",
   data() {
@@ -27,6 +28,7 @@ export default {
   },
   mounted() {
     this.renderMap();
+    console.log(firebase.auth().currentUser)
   },
 };
 </script>
