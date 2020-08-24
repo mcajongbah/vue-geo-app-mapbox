@@ -2,11 +2,12 @@
     <div class="navbar">
         <nav class="deep-purple darken-1">
             <div class="container">
-                <a href="" class="brand-logo left">GeoNinjas</a>
+                <router-link :to="{name: 'MapBox' }" class="brand-logo left">GeoNinjas</router-link>
                 <ul class="right">
-                    <li><router-link :to="{name: 'Signup'}">Sign Up</router-link></li>
-                    <li><a href="">Login</a></li>
-                    <li><a @click="logout">Logout</a></li>
+                    <li v-if="!user"><router-link :to="{name: 'Signup'}">Sign Up</router-link></li>
+                    <li v-if="!user"><router-link :to="{ name: 'Login' }">Login</router-link></li>
+                    <li v-if="user">{{ user.email }}</li>
+                    <li v-if="user"><a @click="logout">Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -19,15 +20,25 @@ import firebase from 'firebase'
         name: 'Navbar',
         data() {
             return {
-
+                user: null
             }
         },
         methods: {
             logout() {
                 firebase.auth().signOut().then(() => {
-                    this.$router.push({ name: 'Signup'})
+                    this.$router.push({ name: 'Login'})
                 })
             }
+        },
+        created() {
+            firebase.auth().onAuthStateChanged(user => {
+                if(user) {
+                    this.user = user
+                } else {
+                    this.user = null
+                }
+            })
+
         }
     }
 </script>
